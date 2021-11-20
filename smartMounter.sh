@@ -8,7 +8,7 @@ fi
 
 if [ "$EUID" -ne 0 ];
 then
-	echo "This script requires root to modify /etc/motd"
+	echo "This script requires root"
 	exit
 fi
 
