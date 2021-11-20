@@ -1,5 +1,16 @@
+#!/usr/local/bin/bash
 #!/bin/bash
 
+if [ -n $( uname -a | grep "Linux" ) ]; then
+	echo "Works only under Linux for a while. Sorry"
+	exit
+fi
+
+if [ "$EUID" -ne 0 ];
+then
+	echo "This script requires root to modify /etc/motd"
+	exit
+fi
 
 path2logs="/var/log/smartmounter"
 path2collect="/dev/disk/by-uuid/"
@@ -59,7 +70,7 @@ function FMntCleaner() {
 	if [ ${#maDirs[@]} -gt 0 ]; then
 		for (( i = 0; i < ${#maDirs[@]}; i++ ));
 		do
-			if [ -z $( echo "$( /sbin/blkid -o export )" | grep "${maDirs[$i]}" ) ];
+			if [ -z $( lsblk  | grep "${maDirs[$i]}" ) ];
 			then
 				rm -R "/mnt/${maDirs[$i]}"
 			fi
